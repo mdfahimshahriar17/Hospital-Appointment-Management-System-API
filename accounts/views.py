@@ -46,3 +46,38 @@ class ForgotPasswordView(APIView):
         )
 
 
+class ResetPasswordView(APIView):
+
+    def post(self, request):
+        email = request.data.get('email')
+        token = request.data.get('token')
+        password = request.data.get('password')
+        password2 = request.data.get('password2')
+
+        if password != password2:
+            return Response(
+                {'password': 'Passwords do not match.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response(
+                {'detail': 'User not found.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if not default_token_generator.check_token(user, token):
+            return Response(
+                {'detail': 'Invalid or expired token.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user.set_password(password)
+        user.save()
+
+        return Response(
+            {'detail': 'Password reset successful.'},
+            status=status.HTTP_200_OK
+        )
