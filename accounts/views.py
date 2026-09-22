@@ -1,14 +1,18 @@
-from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
 
-from .serializers import RegisterSerializer
+from rest_framework import generics
+from rest_framework.views import APIView
+
 
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from rest_framework.permissions import IsAuthenticated
+
 from django.conf import settings
 
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from .serializers import RegisterSerializer
+from .serializers import ProfileSerializer
 
 from .models import User
 
@@ -81,3 +85,32 @@ class ResetPasswordView(APIView):
             {'detail': 'Password reset successful.'},
             status=status.HTTP_200_OK
         )
+
+
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = ProfileSerializer(request.user)
+        return Response(serializer.data)
+
+    def put(self, request):
+        serializer = ProfileSerializer(request.user, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+    def patch(self, request):
+        serializer = ProfileSerializer(
+            request.user,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=400)
