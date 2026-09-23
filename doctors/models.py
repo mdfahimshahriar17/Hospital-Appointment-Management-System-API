@@ -1,3 +1,8 @@
 from django.db import models
 
-# Create your models here.
+
+class Doctor(models.Model):
+    name = models.CharField(...)
+    department = models.CharField(...)
+    specialization = models.CharField(...)
+    visiting_fee = models.DecimalField(...)
