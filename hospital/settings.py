@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'accounts',
+    'doctors',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
