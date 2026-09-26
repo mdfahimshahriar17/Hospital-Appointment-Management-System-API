@@ -20,6 +20,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('role', 'admin')
 
         return self.create_user(
             email=email,
@@ -39,7 +40,7 @@ class User(AbstractUser):
 
     full_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=20, unique=True)
+    phone = models.CharField(max_length=20)
     address = models.TextField(blank=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='patient')
 
