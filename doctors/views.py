@@ -8,6 +8,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from .models import Doctor
 from .serializers import DoctorSerializer
 from .permissions import IsAdminOrReadOnly
+from .pagination import TenPerPagePagination
 
 class DoctorListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAdminOrReadOnly]
@@ -18,6 +19,8 @@ class DoctorListCreateView(generics.ListCreateAPIView):
     filterset_fields = ['department']
     search_fields = ['name']
     ordering_fields = ['visiting_fee']
+
+    pagination_class = TenPerPagePagination
     
 
 
