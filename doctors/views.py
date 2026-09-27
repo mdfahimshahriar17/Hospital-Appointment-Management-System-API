@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework import generics
 
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from .models import Doctor
 from .serializers import DoctorSerializer
@@ -14,10 +14,11 @@ class DoctorListCreateView(generics.ListCreateAPIView):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
 
-    filter_backends = [DjangoFilterBackend, SearchFilter]
-    search_fields = ['name']
-
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['department']
+    search_fields = ['name']
+    ordering_fields = ['visiting_fee']
+    
 
 
 class DoctorDetailView(generics.RetrieveUpdateDestroyAPIView):
