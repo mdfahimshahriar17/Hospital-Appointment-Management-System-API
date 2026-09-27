@@ -9,6 +9,7 @@ class DoctorListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAdminOrReadOnly]
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
+    filterset_fields = ['department']
 
 
 class DoctorDetailView(generics.RetrieveUpdateDestroyAPIView):
