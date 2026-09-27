@@ -3,10 +3,11 @@ from django.shortcuts import render
 from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+
 from .models import Appointment
 from .serializers import AppointmentSerializer
 from .permissions import AppointmentPermission
-
+from .pagination import TenPerPagePagination
 
 class AppointmentListCreateView(generics.ListCreateAPIView):
 
@@ -22,7 +23,8 @@ class AppointmentListCreateView(generics.ListCreateAPIView):
     search_fields = ['patient__full_name', 'doctor__name']
     ordering_fields = ['appointment_date']
 
-    
+    pagination_class = TenPerPagePagination
+
     def get_queryset(self):
         user = self.request.user
 
