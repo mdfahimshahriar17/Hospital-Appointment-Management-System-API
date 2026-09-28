@@ -6,3 +6,7 @@ class Doctor(models.Model):
     department = models.CharField(max_length=100)
     specialization = models.CharField(max_length=100)
     visiting_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+
+    def __str__(self):
+        return f"Doctor {self.name}"
