@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'doctors',
     'appointments',
     'billing',
+    'dashboard',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -67,6 +68,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'hospital.middleware.RequestLoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'hospital.urls'
