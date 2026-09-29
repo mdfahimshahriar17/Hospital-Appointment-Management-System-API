@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from billing.models import Billing
+from doctors.models import Doctor
+
+
 
 class BillingSerializer(serializers.ModelSerializer):
     
@@ -23,3 +26,16 @@ class BillingSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Dicount amoun must be lessthan consaltation fee.")
 
         return attrs
+
+    def create(self, validated_data):
+        appointment = validated_data['appointment']
+        doctor = appointment.doctor
+        consultation_fee = doctor.visiting_fee
+        total_amount = consultation_fee - validated_data['discount']
+
+        validated_data['doctor'] = doctor
+        validated_data['consultation_fee'] = consultation_fee
+        validated_data['total_amount'] = total_amount
+
+        bill = Billing.objects.create(**validated_data)
+        return bill
