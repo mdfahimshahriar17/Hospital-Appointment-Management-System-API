@@ -27,3 +27,9 @@ class BillingListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(patient=self.request.user)
+
+
+class BillingDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Billing.objects.all()
+    serializer_class = BillingSerializer
+    permission_classes = [BillingPermission]
