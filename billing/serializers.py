@@ -20,11 +20,15 @@ class BillingSerializer(serializers.ModelSerializer):
         read_only_fields = ['patient', 'consultation_fee', 'total_amount']
 
     def validate(self, attrs):
+        if attrs['appointment'].status != 'completed':
+            raise serializers.ValidationError("You must complete doctor visit")
+        
         if attrs['discount'] < 0:
-            raise serializers.ValidationError("Discount amount must be  greaterthan 0.")
-        elif attrs['discount'] > attrs['appointment'].doctor.visiting_fee:
-            raise serializers.ValidationError("Dicount amoun must be lessthan consaltation fee.")
-
+            raise serializers.ValidationError("Discount amount cannot be negative.")
+        
+        if attrs['discount'] > attrs['appointment'].doctor.visiting_fee:
+            raise serializers.ValidationError("Discount cannot be greater than consultation fee.")
+        
         return attrs
 
     def create(self, validated_data):
